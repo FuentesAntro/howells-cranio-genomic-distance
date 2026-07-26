@@ -37,7 +37,7 @@ Does skull shape carry a signature of geographic isolation? Using the Howells cr
 ### Figure 1 — Morphological Distance Matrix and Hierarchical Clustering
 
 <p align="center">
-<img src="figures/heatmap_morphological_distance.png" width="100%">
+<img src="figures/heatmap_morphological_distance.png.png" width="100%">
 </p>
 
 **Method.** Population means for all 57 craniometric variables were z-standardized to remove scale effects across measurements with different units and ranges. A pairwise Euclidean distance matrix was computed across the 28 populations and submitted to hierarchical agglomerative clustering using Ward's minimum variance criterion (Ward.D2), which minimizes within-cluster variance at each merge step. The resulting distance matrix is rendered as a heatmap with dendrograms on both axes; color encodes morphological distance from blue (low, 0) to red (high, 13).
