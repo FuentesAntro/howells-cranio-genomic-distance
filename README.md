@@ -1,75 +1,97 @@
-# Howells Cranio-Genomic Distance: Population Structure from Craniofacial Morphology
+# Howells Cranio-Genomic Distance: Quantifying Human Population Structure from 2,524 Skulls
 
-[![R](https://img.shields.io/badge/R-276DC3?style=flat-square&logo=r&logoColor=white)](https://www.r-project.org/)
-[![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
-[![Power BI](https://img.shields.io/badge/Power%20BI-F2C811?style=flat-square&logo=powerbi&logoColor=black)](https://powerbi.microsoft.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-lightgrey.svg?style=flat-square)](LICENSE)
+Multivariate morphometric analysis testing whether cranial shape variation across 28 worldwide populations reflects geographic isolation and population history.
 
-**TL;DR:** Does cranial morphology preserve population history? Using 2,524 skulls from 28 worldwide populations (Howells 1973-1989), this project shows that it does. Morphological distance strongly correlates with geographic isolation, with three distinct clusters and extreme divergence (>12 Euclidean units) in long-term isolates.
-
-| Key Metric | Detail |
-| :--- | :--- |
-| **Dataset** | Howells Craniometric Dataset (W.W. Howells, Harvard) |
-| **Sample** | 2,524 individuals, 28 populations, 57 measurements |
-| **Core Variables** | GOL (glabello-occipital length), XCB (max cranial breadth) + 55 others |
-| **Methods** | Population means, standardized Euclidean distance, Ward.D2 hierarchical clustering, PCA |
-| **Stack** | R (dplyr, ggplot2, pheatmap), Python (pandas), Power BI (DAX) |
+<p align="left">
+<img src="https://img.shields.io/badge/R-4.x-276DC3?style=flat-square&logo=r&logoColor=white" alt="R">
+<img src="https://img.shields.io/badge/Python-3.x-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
+<img src="https://img.shields.io/badge/Power%20BI-Dashboard-F2C811?style=flat-square&logo=powerbi&logoColor=black" alt="Power BI">
+<img src="https://img.shields.io/badge/License-MIT-4CAF50?style=flat-square" alt="MIT License">
+</p>
 
 ---
 
-### Figure 1 — Morphological Distance Matrix (Primary Result)
+## TL;DR
 
-<p align="center">
-  <img src="figures/heatmap_morphological_distance.png" width="100%">
-</p>
-
-**Figure 1. Pairwise morphological distance between 28 populations.**
-Euclidean distance computed on standardized population means. Hierarchical clustering (Ward.D2). Scale: Blue (0) = morphologically identical, Red (13) = highly divergent.
-
-**Interpretation:** The matrix reveals strong population structure, not random variation.
-
-*   **Polynesian Cluster (Distance 2-4):** EASTER I, N MAORI, S MAORI, ARIKARA, MORIORI. Low internal distance, consistent with recent shared ancestry and expansion.
-*   **East Asia-Pacific Cluster (Distance 3-5):** ANYANG, AINU, GUAM, MOKAPU, HAINAN, S JAPAN, N JAPAN, PHILLIPI. Tight cluster reflecting regional continuity.
-*   **Isolated Outliers (Distance >12):** ANDAMAN, BUSHMAN, BURIAT, ESKIMO. Maximum divergence from all other groups. ANDAMAN vs. BURIAT reaches the highest distance (12.9), supporting long-term isolation, drift, and local adaptation as drivers of craniofacial divergence.
-
-Data source: `distancia_morfologica.csv`
-
-### Figure 2 — Principal Component Analysis of Individual Variation
-
-<p align="center">
-  <img src="figures/pca_howells.png" width="100%">
-</p>
-
-**Figure 2. PCA of 2,524 crania (57 measurements).**
-PC1 (27.9%) captures overall cranial size and length-breadth proportion. PC2 (8.6%) captures facial vs. vault variation. Each point is an individual, colored by population.
-
-While individual overlap is high — expected for a single species — population centroids are clearly separated. Isolates like BURIAT and ANDAMAN occupy the periphery of morphospace, confirming the pattern from Figure 1 at the individual level. This validates that population-level averaging does not create artificial clusters.
-
-### Figure 3 — Power BI Dashboard: GOL vs XCB
-
-<p align="center">
-  <img src="figures/powerbi_GOL_XCB_promedio_poblacion.png" width="100%">
-</p>
-
-**Figure 3. Mean cranial length (GOL) vs. breadth (XCB) per population.**
-X-axis: Glabello-occipital length (GOL) mm, Y-axis: Maximum cranial breadth (XCB) mm. Each point is a population mean (n=28).
-
-**Outlier analysis:**
-*   **ANDAMAN (164.5 mm GOL, 133.4 mm XCB):** Smallest skulls in the dataset. Classic island effect and long-term isolation in the Andaman Islands.
-*   **BURIAT (177.3 mm GOL, 151.7 mm XCB):** Broadest skulls. Consistent with cold adaptation in Siberia (brachycephalization).
-
-Interactive file: `howells_dashboard.pbix` — includes DAX measures `Avg_GOL` and `Avg_XCB`.
+Does skull shape carry a signature of geographic isolation? Using the Howells craniometric dataset (2,524 individuals, 28 populations, 57 measurements), this project computes population-level morphological distances and tests them against clustering and dimensionality-reduction methods. The answer is yes: geographically and historically isolated populations — Andaman Islanders, San (Bushman), Buriat, and Arctic Eskimo — separate from the global sample at distances exceeding 12 standard units, consistent with genetic drift and founder effects operating on small, isolated founding populations.
 
 ---
 
-### Methods & Tech Stack
+## Key Metrics
 
-| Stage | Tool | Implementation |
-| :--- | :--- | :--- |
-| **Data Cleaning** | R | `howells_raw.csv` → filtering, outlier check, aggregation to population means |
-| **Distance Matrix** | R | Scale (z-score) + Euclidean distance → `distancia_morfologica.csv` |
-| **Clustering** | R | `hclust(method="ward.D2")` + `pheatmap` with dendrograms |
-| **Multivariate** | R | PCA with `prcomp`, visualization with `ggplot2` |
-| **Dashboarding** | Power BI | Scatter with population legend, DAX calculated tables |
+| Metric | Value |
+|---|---|
+| Populations | 28, worldwide distribution |
+| Sample size (n) | 2,524 individual crania |
+| Craniometric variables | 57 standard measurements (Howells protocol) |
+| Aggregation level | Population means, z-standardized |
+| Distance metric | Euclidean distance on standardized means |
+| Clustering method | Hierarchical, Ward's minimum variance (Ward.D2) |
+| Dimensionality reduction | PCA — PC1 = 27.9% variance, PC2 = 8.6% variance |
+| Time depth of source data | Data collected 1965–1980 (Howells, published 1973–1989) |
 
-### Repository Structure
+---
+
+## Main Results
+
+### Figure 1 — Morphological Distance Matrix and Hierarchical Clustering
+
+<p align="center">
+<img src="figures/heatmap_morphological_distance.png" width="100%">
+</p>
+
+**Method.** Population means for all 57 craniometric variables were z-standardized to remove scale effects across measurements with different units and ranges. A pairwise Euclidean distance matrix was computed across the 28 populations and submitted to hierarchical agglomerative clustering using Ward's minimum variance criterion (Ward.D2), which minimizes within-cluster variance at each merge step. The resulting distance matrix is rendered as a heatmap with dendrograms on both axes; color encodes morphological distance from blue (low, 0) to red (high, 13).
+
+**Findings.** The clustering resolves three principal groupings:
+
+1. **Polynesia / Remote Oceania** — EASTER I, N/S MAORI, ARIKARA, MORIORI form a tight cluster, consistent with a shared Austronesian-derived ancestry and serial founder effects across the Pacific.
+2. **East Asia–Pacific Rim** — ANYANG, AINU, GUAM, MOKAPU, HAINAN, N/S JAPAN, and PHILIPPINES group together, reflecting geographic contiguity and gene flow across continental and near-shore East Asia.
+3. **Isolated outliers (distance > 12)** — ANDAMAN, BUSHMAN, BURIAT, and ESKIMO each split off early in the dendrogram, at distances well above the rest of the sample. These four populations share a common demographic profile: small effective population size, long-term geographic or reproductive isolation, and strong environmental selection pressure — the expected signature of genetic drift acting independently of the broader human morphological continuum.
+
+The pattern supports an isolation-by-distance model: morphological divergence scales with the degree of historical geographic and reproductive isolation, not with any discrete racial typology.
+
+---
+
+### Figure 2 — Principal Component Analysis of Cranial Shape Variation
+
+<p align="center">
+<img src="figures/pca_howells.png" width="100%">
+</p>
+
+**Method.** PCA was applied to all 57 measurements at the individual level (n = 2,524), preserving within-population variance rather than collapsing to means. Each point represents one cranium, colored by population of origin (28 categories).
+
+**Findings.** PC1 accounts for 27.9% of total variance and PC2 for 8.6% (36.5% combined) — a substantial share for a 57-dimensional biological dataset, indicating that a small number of underlying shape axes (general cranial size and an elongation/breadth axis) structure most of the variation. Population clusters show extensive overlap along both axes, which is the expected result for a continuously varying, clinally distributed trait: cranial morphology does not partition into discrete, non-overlapping types. At the same time, population centroids are visibly displaced from one another, and the same outlier populations identified in Figure 1 (Andaman, Bushman, Buriat, Eskimo) occupy the periphery of the PC1–PC2 space. This dual pattern — global overlap with detectable structure — is the classic signature of human biological variation: clinal, not categorical.
+
+---
+
+### Figure 3 — Interactive Dashboard: Cranial Length vs. Breadth by Population
+
+<p align="center">
+<img src="figures/powerbi_GOL_XCB_promedio_poblacion.png" width="100%">
+</p>
+
+**Method.** A Power BI dashboard was built on the aggregated dataset, with DAX measures `Avg_GOL` (Glabello-Occipital Length) and `Avg_XCB` (Maximum Cranial Breadth) computed per population. The scatter plot below shows all 28 population averages, allowing interactive filtering and comparison of the two variables that most directly define cranial vault proportions.
+
+**Findings.** Two populations depart from the main distribution:
+
+- **ANDAMAN** — lowest average GOL (164.5 mm), consistent with an insular effect: small, long-isolated island populations with reduced body and cranial size, plausibly linked to constrained resource availability and founder effects.
+- **BURIAT** — highest average XCB (151 mm), producing a markedly brachycephalic (broad) cranial vault, consistent with cold-climate adaptation in Siberian populations, where a more spherical, heat-retaining cranial shape is favored under strong thermoregulatory selection (a pattern paralleling Bergmann's and Allen's rules).
+
+These two extremes reinforce the same conclusion drawn from the distance matrix and PCA: cranial shape tracks the ecological and demographic history of each population, not a single global cline.
+
+---
+
+## Methods and Tech Stack
+
+| Layer | Tools | Purpose |
+|---|---|---|
+| Data cleaning and wrangling | R (`dplyr`, `tidyr`) | Raw data validation, missing-value handling, population-level aggregation |
+| Statistical analysis | R (base `stats`, `dist()`, `hclust()`) | Euclidean distance matrix, Ward.D2 hierarchical clustering, PCA |
+| Visualization (static) | R (`ggplot2`, `pheatmap`) | Heatmap with dendrograms, PCA scatter plot |
+| Exploratory analysis | Python (`pandas`, `seaborn`) | Cross-validation of aggregation logic and exploratory plotting |
+| Business intelligence | Power BI (DAX: `Avg_GOL`, `Avg_XCB`) | Interactive population-level dashboard |
+| Version control | Git / GitHub | Reproducibility and project history |
+
+---
+
+## Repository Structure
