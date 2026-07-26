@@ -67,7 +67,7 @@ The pattern supports an isolation-by-distance model: morphological divergence sc
 ### Figure 3 — Interactive Dashboard: Cranial Length vs. Breadth by Population
 
 <p align="center">
-<img src="figures/powerbi_GOL_XCB_promedio_poblacion.png" width="100%">
+<img src="figures/powerbi_GOL_XCB_promedio_poblacion.png.png" width="100%">
 </p>
 
 **Method.** A Power BI dashboard was built on the aggregated dataset, with DAX measures `Avg_GOL` (Glabello-Occipital Length) and `Avg_XCB` (Maximum Cranial Breadth) computed per population. The scatter plot below shows all 28 population averages, allowing interactive filtering and comparison of the two variables that most directly define cranial vault proportions.
