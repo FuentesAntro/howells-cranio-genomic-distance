@@ -58,7 +58,7 @@ Pairwise Mahalanobis distances between the 28 population centroids show clear ge
 **Dashboard view**
 A population-level look at two of the most discriminating measures — cranial length (GOL) and breadth (XCB) — already separates dolichocranic (long, narrow) from brachycranic (short, broad) populations at a glance.
 
-![Power BI — GOL vs XCB by population](figures/powerbi_gol_xcb.png)
+![Power BI — GOL vs XCB by population](figures/powerbi_GOL_XCB_promedio_poblacion.png)
 
 ## Ethical note
 
