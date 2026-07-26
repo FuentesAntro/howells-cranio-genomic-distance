@@ -95,3 +95,71 @@ These two extremes reinforce the same conclusion drawn from the distance matrix 
 ---
 
 ## Repository Structure
+
+howells-cranio-genomic-distance/
+├── data/
+│ ├── raw/
+│ │ └── howells_raw.csv # Original individual-level measurements (2,524 x 57)
+│ └── processed/
+│ └── distancia_morfologica.csv # Population-level Euclidean distance matrix
+├── figures/
+│ ├── heatmap_morphological_distance.png
+│ ├── pca_howells.png
+│ └── powerbi_GOL_XCB_promedio_poblacion.png
+├── howells_dashboard.pbix # Interactive Power BI dashboard
+├── LICENSE # MIT
+└── README.md
+
+---
+
+## How to Reproduce
+
+### R pipeline (distance matrix, clustering, PCA)
+
+```r
+# 1. Load dependencies
+install.packages(c("dplyr", "tidyr", "ggplot2", "pheatmap"))
+library(dplyr); library(tidyr); library(ggplot2); library(pheatmap)
+
+# 2. Load raw data
+raw <- read.csv("data/raw/howells_raw.csv")
+
+# 3. Aggregate to population means and standardize
+pop_means <- raw %>%
+  group_by(Population) %>%
+  summarise(across(where(is.numeric), mean, na.rm = TRUE))
+
+pop_scaled <- scale(pop_means[, -1])
+rownames(pop_scaled) <- pop_means$Population
+
+# 4. Compute Euclidean distance matrix
+dist_matrix <- dist(pop_scaled, method = "euclidean")
+write.csv(as.matrix(dist_matrix), "data/processed/distancia_morfologica.csv")
+
+# 5. Hierarchical clustering (Ward.D2) and heatmap
+pheatmap(as.matrix(dist_matrix),
+         clustering_method = "ward.D2",
+         filename = "figures/heatmap_morphological_distance.png")
+
+# 6. PCA on individual-level data
+pca <- prcomp(raw[, -c(1,2)], scale. = TRUE)
+summary(pca)  # PC1 = 27.9%, PC2 = 8.6%
+```
+
+### Power BI dashboard
+
+1. Open `howells_dashboard.pbix` in Power BI Desktop.
+2. Update the data source connection to point to `data/processed/distancia_morfologica.csv` and `data/raw/howells_raw.csv`.
+3. Refresh the model (`Home → Refresh`) to recompute the `Avg_GOL` and `Avg_XCB` DAX measures.
+4. Interact with the scatter plot to filter by population or region.
+
+---
+
+## Conclusion
+
+Cranial morphology in the Howells dataset is not randomly distributed across geography: it clusters populations by continental and insular proximity (Polynesia, East Asia–Pacific), and it isolates precisely the populations with the strongest independent demographic histories — the Andaman Islanders, San, Buriat, and Eskimo — as the most morphologically distant from the global sample. This is the expected outcome under an isolation-by-distance model of human biological variation, where genetic drift and localized adaptation accumulate in proportion to a population's reproductive isolation, rather than under any model of discrete, bounded racial types. The convergent evidence from hierarchical clustering, PCA, and bivariate dashboard analysis across three independent analytical approaches strengthens confidence in this conclusion beyond what any single method would support alone.
+
+---
+
+**Author:** FuentesAntro — Biological Anthropology, Universidad de Sevilla, 2025/26
+**License:** MIT
