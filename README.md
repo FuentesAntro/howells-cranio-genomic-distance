@@ -98,16 +98,16 @@ These two extremes reinforce the same conclusion drawn from the distance matrix 
 
 howells-cranio-genomic-distance/
 ├── data/
-│ ├── raw/
-│ │ └── howells_raw.csv # Original individual-level measurements (2,524 x 57)
-│ └── processed/
-│ └── distancia_morfologica.csv # Population-level Euclidean distance matrix
+│   ├── raw/
+│   │   └── howells_raw.csv              # Original individual-level measurements (2,524 x 57)
+│   └── processed/
+│       └── distancia_morfologica.csv    # Population-level Euclidean distance matrix
 ├── figures/
-│ ├── heatmap_morphological_distance.png
-│ ├── pca_howells.png
-│ └── powerbi_GOL_XCB_promedio_poblacion.png
-├── howells_dashboard.pbix # Interactive Power BI dashboard
-├── LICENSE # MIT
+│   ├── heatmap_morphological_distance.png
+│   ├── pca_howells.png
+│   └── powerbi_GOL_XCB_promedio_poblacion.png
+├── howells_dashboard.pbix               # Interactive Power BI dashboard
+├── LICENSE                              # MIT
 └── README.md
 
 ---
