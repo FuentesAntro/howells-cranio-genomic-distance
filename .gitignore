@@ -1,1 +1,7 @@
-
+.Rhistory
+.RData
+.Rproj.user
+__pycache__/
+*.pyc
+~$*.pbix
+.DS_Store
