@@ -9,12 +9,12 @@ Purpose:
 
 Author: FuentesAntro
 """
-
-import pandas as pd
-import numpy as np
-import seaborn as sns
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
 from pathlib import Path
+from scipy.spatial.distance import pdist, squareform
 
 # Config
 RAW_PATH = Path("data/raw/howells_raw.csv")
@@ -25,30 +25,29 @@ POP_COL = "POP" # cambia si en tu csv es "Population"
 def load_and_validate(path: Path) -> pd.DataFrame:
     df = pd.read_csv(path)
     print(f"[INFO] Loaded {df.shape[0]} rows, {df.shape[1]} cols")
-    # Validación básica
     assert POP_COL in df.columns, f"No encuentro columna {POP_COL}"
     print(f"[INFO] Populations found: {df[POP_COL].nunique()}")
     return df
 
-def compute_population_means(df: pd.DataFrame) -> pd.DataFrame:
+def compute_population_means(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
-    # Quita IDs si los tienes
     numeric_cols = [c for c in numeric_cols if c not in ["ID"]]
     means = df.groupby(POP_COL)[numeric_cols].mean()
-    # z-standardize como haces en R
     means_z = (means - means.mean()) / means.std()
     return means, means_z
 
 def euclidean_distance_matrix(means_z: pd.DataFrame) -> pd.DataFrame:
-    from scipy.spatial.distance import pdist, squareform
     dist = squareform(pdist(means_z.values, metric='euclidean'))
     dist_df = pd.DataFrame(dist, index=means_z.index, columns=means_z.index)
     return dist_df
 
 def plot_diagnostics(means: pd.DataFrame):
+    if "GOL" not in means.columns or "XCB" not in means.columns:
+        print("[WARN] GOL/XCB not found, skipping plot")
+        return
+
     FIGURES_DIR.mkdir(exist_ok=True)
-    # Replica de tu dashboard pero en Python - para validar
-    plt.figure(figsize=(8,6))
+    plt.figure(figsize=(8, 6))
     sns.scatterplot(data=means, x="GOL", y="XCB", hue=means.index, legend=False)
     for pop in means.index:
         if pop in ["ANDAMAN", "BURIAT", "BUSHMAN", "ESKIMO"]:
