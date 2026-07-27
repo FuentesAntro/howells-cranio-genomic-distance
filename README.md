@@ -108,7 +108,8 @@ howells-cranio-genomic-distance/
 │   ├── pca_howells.png
 │   └── powerbi_GOL_XCB_promedio_poblacion.png
 ├── scripts/
-│   └── reproduce.R
+│   ├── reproduce.R
+│   └── exploratory_check.py
 ├── dashboard/
 │   └── howells_dashboard.pbix
 ├── .gitignore
