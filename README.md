@@ -133,5 +133,9 @@ Cranial morphology in the Howells dataset is not randomly distributed across geo
 
 ---
 
+## Citation
+Howells, W. W. (1973, 1989). Cranial Variation in Man. Papers of the Peabody Museum.
+---
+
 **Author:** FuentesAntro — Biological Anthropology, Universidad de Sevilla, 2025/26
 **License:** MIT
