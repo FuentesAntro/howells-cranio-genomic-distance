@@ -96,21 +96,25 @@ These two extremes reinforce the same conclusion drawn from the distance matrix 
 
 ## Repository Structure
 
+```
 howells-cranio-genomic-distance/
 ├── data/
-│   ├── raw/howells_raw.csv
-│   └── processed/morphological_distance_matrix.csv
+│   ├── raw/
+│   │   └── howells_raw.csv
+│   └── processed/
+│       └── morphological_distance_matrix.csv
 ├── figures/
 │   ├── heatmap_morphological_distance.png
 │   ├── pca_howells.png
 │   └── powerbi_GOL_XCB_promedio_poblacion.png
 ├── scripts/
-│   └── reproduce.R          <- aquí va todo tu código
+│   └── reproduce.R
 ├── dashboard/
 │   └── howells_dashboard.pbix
 ├── .gitignore
 ├── LICENSE
 └── README.md
+```
 
 ---
 
