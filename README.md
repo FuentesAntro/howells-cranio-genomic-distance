@@ -98,53 +98,21 @@ These two extremes reinforce the same conclusion drawn from the distance matrix 
 
 howells-cranio-genomic-distance/
 ├── data/
-│   ├── raw/
-│   │   └── howells_raw.csv              # Original individual-level measurements (2,524 x 57)
-│   └── processed/
-│       └── distancia_morfologica.csv    # Population-level Euclidean distance matrix
+│   ├── raw/howells_raw.csv
+│   └── processed/morphological_distance_matrix.csv
 ├── figures/
 │   ├── heatmap_morphological_distance.png
 │   ├── pca_howells.png
 │   └── powerbi_GOL_XCB_promedio_poblacion.png
-├── howells_dashboard.pbix               # Interactive Power BI dashboard
-├── LICENSE                              # MIT
+├── scripts/
+│   └── reproduce.R          <- aquí va todo tu código
+├── dashboard/
+│   └── howells_dashboard.pbix
+├── .gitignore
+├── LICENSE
 └── README.md
 
 ---
-
-## How to Reproduce
-
-### R pipeline (distance matrix, clustering, PCA)
-
-```r
-# 1. Load dependencies
-install.packages(c("dplyr", "tidyr", "ggplot2", "pheatmap"))
-library(dplyr); library(tidyr); library(ggplot2); library(pheatmap)
-
-# 2. Load raw data
-raw <- read.csv("data/raw/howells_raw.csv")
-
-# 3. Aggregate to population means and standardize
-pop_means <- raw %>%
-  group_by(Population) %>%
-  summarise(across(where(is.numeric), mean, na.rm = TRUE))
-
-pop_scaled <- scale(pop_means[, -1])
-rownames(pop_scaled) <- pop_means$Population
-
-# 4. Compute Euclidean distance matrix
-dist_matrix <- dist(pop_scaled, method = "euclidean")
-write.csv(as.matrix(dist_matrix), "data/processed/distancia_morfologica.csv")
-
-# 5. Hierarchical clustering (Ward.D2) and heatmap
-pheatmap(as.matrix(dist_matrix),
-         clustering_method = "ward.D2",
-         filename = "figures/heatmap_morphological_distance.png")
-
-# 6. PCA on individual-level data
-pca <- prcomp(raw[, -c(1,2)], scale. = TRUE)
-summary(pca)  # PC1 = 27.9%, PC2 = 8.6%
-```
 
 ### Power BI dashboard
 
