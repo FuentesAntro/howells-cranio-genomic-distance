@@ -1,4 +1,4 @@
-# Howells Cranio-Genomic Distance: Quantifying Human Population Structure from 2,524 Skulls
+# Morphological Proxy for Population Structure: Quantifying Human Population Structure from 2,524 Skulls
 
 Multivariate morphometric analysis testing whether cranial shape variation across 28 worldwide populations reflects geographic isolation and population history.
 
